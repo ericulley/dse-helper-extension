@@ -1,0 +1,21 @@
+{
+  "name": "dse-esd-extension",
+  "version": "1.0.0",
+  "description": "",
+  "main": "popup.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "Eric Culley",
+  "license": "ISC",
+  "dependencies": {
+    "googleapis": "^109.0.1"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.206",
+    "@types/node": "^18.11.18",
+    "typescript": "^4.9.4"
+  }
+}
