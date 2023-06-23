@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class SalesforceCaseDetails {
     constructor() {
         // Get tenant name
@@ -10,4 +12,4 @@ setTimeout(() => {
     const caseDetails = new SalesforceCaseDetails();
     console.log("CASE DETAILS: ", caseDetails);
 }, 15000);
-//# sourceMappingURL=salesforce-script.js.map
+//# sourceMappingURL=sf-script.js.map

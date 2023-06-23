@@ -5,7 +5,7 @@
   "main": "popup.js",
   "type": "module",
   "scripts": {
-    "build": "tsc"
+    "build": "rm -rf ./dist && tsc"
   },
   "keywords": [],
   "author": "Eric Culley",
