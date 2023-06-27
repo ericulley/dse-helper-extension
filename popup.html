@@ -5,21 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Developer Support Helper Extension</title>
-    <script type="module" src="./dist/popup.js" defer></script>
-    <style>
-        button {
-          padding: 10px;
-          background-color: #3C79F8;
-          display: inline-block;
-        }
-      </style>
+    <link rel="stylesheet" href="style.css" />
+    <script type="module" src="./dist/popup.js"></script>
 </head>
 <body>
-    <div id="extension">
-        <h1>DSE Helper</h1>
-        <button id="click-me">Click Me</button>
-            <div id="friendDiv"></div>
-        </body>
-    </div>
+    <template id="salesforce-template">
+        <div>
+            <h1>DSE Helper</h1>
+            <button id="create-template-btn">Create Template</button>
+        </div>
+    </template>
+    <div id="app"></div>
 </body>
 </html>

@@ -26,12 +26,12 @@
     },
     "key": "-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgNDtTgoMSBNjkEumZ5nGZqZXG4xh4IzmhYBfikowZ0Ni1TZY0Qu5gL/tfx3AEncMNbBBVVfkDDLo7xj8hWHJMqtQhmoeiL6ke7CU5slbjMqudz7oSe7a+kYZh4ja5Wd70ZZV5P0mp7TfvmVIinzyHXwEm2Q2G1/Lf1fTyIGzAFhSujgsQ8YEhXwwpMwZJl0l3963Tl2tKIfF8RzdGSsHEpZiU7E5Qfr9/ObpeZAVEKQXlVDFvX+UvgOk1Q3T190f3GJ4Kd3o77sUw/clXjGPkrDbauR5z8CRD6eV1eyleTJ5m5vSgMuLc5fqtpdRB9lW4ZIlJbF05tIwC2sWoQ4VYwIDAQAB-----END PUBLIC KEY-----",
     "background": {
-      "service_worker": "./dist/service.js"
+      "service_worker": "./dist/background.js"
     },
     "content_scripts": [
       {
         "matches": ["https://auth0.lightning.force.com/lightning/r/Case/*"],
-        "js": ["./dist/content_scripts/sf-script.js"]
+        "js": ["./dist/sf-script.js"]
       }
     ]
   }
