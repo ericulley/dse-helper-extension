@@ -1,4 +1,3 @@
-// chrome.action.onClicked.addListener(() => {
-//     // chrome.tabs.create({url: 'popup.html'});
+// chrome.tabs.onUpdated.addListener((tabId, tab) => {
 // });
 //# sourceMappingURL=background.js.map

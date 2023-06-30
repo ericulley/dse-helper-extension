@@ -17,6 +17,8 @@ class SalesforceCase {
     }
 }
 
+console.log("CONTEXT SCRIPT STARTING...")
+console.log("URL: ", window.location.href)
 
 setTimeout(() => {
     const supportCase = new SalesforceCase();
