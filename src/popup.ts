@@ -1,3 +1,12 @@
+interface Req {
+    method: 'GET' | 'POST',
+    headers: {
+        "Authorization": string,
+        "Content-Type": string
+    }, 
+    body?: string
+}
+
 class SalesforceComponent {
     private templateElement
     private hostElement 
@@ -22,69 +31,125 @@ class SalesforceComponent {
         createTemplateButton.addEventListener('click', this.createTemplate);
     };
 
-    private async checkForFolder(authToken: string): Promise<void> {
+    private checkForFolder = async (authToken: string): Promise<string | undefined> => {
+        const request: Req = {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+                'Content-Type': 'application/json'
+            }
+        };
         const queryString: string = encodeURIComponent('mimeType="application/vnd.google-apps.folder" and parents="root" and name="ESD Templates" and trashed=false');
 
         try {
-            const res = await fetch(`https://www.googleapis.com/drive/v3/files?q=${queryString}`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${authToken}`,
-                    'Content-Type': 'application/json'
-                }
-            })
+            const res = await fetch(`https://www.googleapis.com/drive/v3/files?q=${queryString}`, request);
             const data = await res.json();
-            if (data && data.files && data.files.length > 0) {
-                console.log("Data: ", data);
+
+            if (data.files && data.files.length > 0 && data.files[0].name === 'ESD Templates') {
+                console.log("Found Folder: ", data.files[0]);
+                return data.files[0].id;
+            } else {
+                return undefined
             }
         } catch (err: any) {
-            console.error(err);
-            return err;
+            if (typeof err === 'object'){
+                throw new Error(JSON.stringify(err));
+            } else {
+                throw new Error(err);
+            }
         }
        
     }
 
-    private async createESDTemplateFolder() {
-        
+    private createFolder = async (authToken: string): Promise<string> => {
+        const request: Req = {
+            method: 'POST',
+            body: JSON.stringify({
+                mimeType: 'application/vnd.google-apps.folder',
+                name: 'ESD Templates',
+                parents: ['root']
+            }),
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+                'Content-Type': 'application/json'
+            }
+        };
+
+        try {
+            const res = await fetch('https://www.googleapis.com/drive/v3/files', request);
+            const data = await res.json();
+
+            /**** PICKUP WORK HERE ****/
+            console.log("Data; New Folder Id: ", data.id);
+            return data.id as string
+           
+        } catch (err: any) {
+            if (typeof err === 'object'){
+                throw new Error(JSON.stringify(err));
+                console.error(err);
+            } else {
+                throw new Error(err);
+            }
+        }
+       
     }
 
-    private async createTemplate() {
-        console.log("CREATE TEMPLATE 2")
-        let templateId: string
+    private createFile = async (authToken: string, folder: string): Promise<string> => {
+        console.log("Create File: Folder ID: ", folder)
+        try {
+            const res = await fetch('https://www.googleapis.com/drive/v3/files/1XW2aCKZgn8Ly8CLY9FeNhmX9LfdJuVlRwPU6LsfuecI/copy?supportsAllDrives=true', {
+                method: 'POST', 
+                headers: {
+                    'Authorization': `Bearer ${authToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({parents: [`${folder}`]}) 
+            })
+            const data = await res.json()
+            if (data.id) {
+                console.log("Data; New Copy's ID: ", data.id);
+                return data.id
+            } else {
+                throw new Error(data)
+            }
+        } catch (err: any) {
+            if (typeof err === 'object'){
+                throw new Error(err);
+            } else {
+                throw new Error(err);
+            }
+        }
+    }
+
+    private createTemplate = async () => {
+        console.log("CREATE TEMPLATE START")
+        let folderId: string | undefined
+        let newCopyId: string;
         
+        // Get Google API Token
         const token: string = (await chrome.identity.getAuthToken({interactive: true})).token;
         console.log("Token: ", token);
 
-        // Check is 'ESD Templates' folder already exists
-       this.checkForFolder(token);
+        // Check if 'ESD Templates' folder already exists
+        folderId = await this.checkForFolder(token) as unknown as string;
 
+        // If no folder was found, create one.
+        if (!folderId) {
+            folderId = await this.createFolder(token)as unknown as string;
+        } 
+        
+        // Create template in folder
+        if (folderId) {
+            newCopyId = await this.createFile(token, folderId) as unknown as string;
+        } else {
+            throw new Error("Error: No Folder ID");
+        }
 
-        // const res = await fetch('https://www.googleapis.com/drive/v3/files?supportsAllDrives=true', {
-        //     method: 'POST', 
-        //     body: {
-        //         memeType: 'application/vnd.google-apps.folder'
-        //     },
-        //     headers: {
-        //         'Authorization': `Bearer ${token}`,
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify({parents: ['root']}) 
-        // })
-        // const data = await res.json()
-        // console.log("Data: ", data.id);
-        // window.open(`https://docs.google.com/document/d/${data.id}/edit`, '_blank');
-
-        // const res = await fetch('https://www.googleapis.com/drive/v3/files/1XW2aCKZgn8Ly8CLY9FeNhmX9LfdJuVlRwPU6LsfuecI/copy?supportsAllDrives=true', {
-        //     method: 'POST', 
-        //     headers: {
-        //         'Authorization': `Bearer ${token}`,
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify({parents: ['root']}) 
-        // })
-        // const data = await res.json()
-        // console.log("Data: ", data.id);
-        // window.open(`https://docs.google.com/document/d/${data.id}/edit`, '_blank');
+        if (newCopyId) {
+            window.open(`https://docs.google.com/document/d/${newCopyId}/edit`, '_blank');
+        } else {
+            throw new Error("Error: No NewCopy ID");
+        }
     }
 }
 
