@@ -36,144 +36,31 @@ class SalesforceCase {
                 const priority = activeTab.getElementsByClassName('slds-form')[0].childNodes[0].childNodes[7].childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].childNodes[0].textContent;
                 // Get platform type
                 const platformType = activeTab.getElementsByClassName('slds-form')[3].childNodes[0].childNodes[1].childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].childNodes[0].textContent;
-                const layer0 = typeof platformType === 'string' ? true : false;
+                const layer0 = typeof platformType === 'string' && platformType.length > 0 ? true : false;
                 return `ESDTemplate?case:${caseNumber}&tenant=${tenant}&priority=${priority}&layer0=${layer0}`;
             }
             catch (err) {
                 throw new Error(err);
             }
         };
-        this.checkForFolder = (authToken) => __awaiter(this, void 0, void 0, function* () {
-            const request = {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${authToken}`,
-                    'Content-Type': 'application/json'
-                }
-            };
-            const queryString = encodeURIComponent('mimeType="application/vnd.google-apps.folder" and parents="root" and name="ESD Templates" and trashed=false');
-            try {
-                const res = yield fetch(`https://www.googleapis.com/drive/v3/files?q=${queryString}`, request);
-                const data = yield res.json();
-                if (data.files && data.files.length > 0 && data.files[0].name === 'ESD Templates') {
-                    console.log("Found Folder: ", data.files[0]);
-                    return data.files[0].id;
-                }
-                else {
-                    return undefined;
-                }
-            }
-            catch (err) {
-                if (typeof err === 'object') {
-                    throw new Error(JSON.stringify(err));
-                }
-                else {
-                    throw new Error(err);
-                }
-            }
-        });
-        this.createFolder = (authToken) => __awaiter(this, void 0, void 0, function* () {
-            const request = {
-                method: 'POST',
-                body: JSON.stringify({
-                    mimeType: 'application/vnd.google-apps.folder',
-                    name: 'ESD Templates',
-                    parents: ['root']
-                }),
-                headers: {
-                    'Authorization': `Bearer ${authToken}`,
-                    'Content-Type': 'application/json'
-                }
-            };
-            try {
-                const res = yield fetch('https://www.googleapis.com/drive/v3/files', request);
-                const data = yield res.json();
-                /**** PICKUP WORK HERE ****/
-                console.log("Data; New Folder Id: ", data.id);
-                return data.id;
-            }
-            catch (err) {
-                if (typeof err === 'object') {
-                    throw new Error(JSON.stringify(err));
-                    console.error(err);
-                }
-                else {
-                    throw new Error(err);
-                }
-            }
-        });
-        this.createFile = (authToken, folder, fileName) => __awaiter(this, void 0, void 0, function* () {
-            console.log("Create File: Folder ID: ", folder);
-            const request = {
-                method: 'POST',
-                body: JSON.stringify({
-                    name: fileName,
-                    parents: [folder]
-                }),
-                headers: {
-                    'Authorization': `Bearer ${authToken}`,
-                    'Content-Type': 'application/json'
-                }
-            };
-            try {
-                const res = yield fetch('https://www.googleapis.com/drive/v3/files/1XW2aCKZgn8Ly8CLY9FeNhmX9LfdJuVlRwPU6LsfuecI/copy?supportsAllDrives=true', request);
-                const data = yield res.json();
-                if (data.id) {
-                    console.log("Data; New Copy's ID: ", data.id);
-                    return data.id;
-                }
-                else {
-                    throw new Error(data);
-                }
-            }
-            catch (err) {
-                if (typeof err === 'object') {
-                    throw new Error(err);
-                }
-                else {
-                    throw new Error(err);
-                }
-            }
-        });
-        this.getAPIToken = () => __awaiter(this, void 0, void 0, function* () {
-            let token = '';
-            const res = yield chrome.runtime.sendMessage({ body: 'get-oauth-token' });
-            console.log("RESPONSE: ", res);
-            token = res.token;
-            return token;
-        });
         this.createTemplate = () => __awaiter(this, void 0, void 0, function* () {
             console.log("CREATE TEMPLATE START");
             let token;
             let fileName;
             let folderId;
             let newCopyId;
-            // Get Google API token
-            chrome.runtime.sendMessage({ body: 'get-oauth-token' }, (res) => {
-                console.log("Token 2: ", res);
-                token = res;
-            });
             // Fetch values for file name
             fileName = this.fetchValues();
-            // Check if 'ESD Templates' folder already exists
-            folderId = (yield this.checkForFolder(token));
-            // If no folder was found, create one.
-            if (!folderId) {
-                folderId = (yield this.createFolder(token));
-            }
-            // Create template in folder
-            if (folderId) {
-                newCopyId = (yield this.createFile(token, folderId, fileName));
-            }
-            else {
-                throw new Error("Error: No Folder ID");
-            }
-            if (newCopyId) {
-                window.open(`https://docs.google.com/document/d/${newCopyId}/edit`, '_blank');
-            }
-            else {
-                throw new Error("Error: No NewCopy ID");
-            }
+            // Get Google API token
+            chrome.runtime.sendMessage({ path: '/services/create-template', fileName: fileName }, (res) => {
+                console.log("Response:New File ID: ", res);
+                if (res.newCopyId) {
+                    window.open(`https://docs.google.com/document/d/${res.newCopyId}/edit`, '_blank');
+                }
+                else {
+                    throw new Error("Error: No NewCopy ID");
+                }
+            });
         });
         this.createEsdButton();
     }

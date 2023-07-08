@@ -5,13 +5,13 @@
     "version": "1.0",
     "action": {
       "default_popup": "popup.html",
-      "default_icon": "./public/auth0-logo.png"
+      "default_icon": "./public/dse-helper-logo.png"
     },
     "icons": {
-      "16": "./public/auth0-logo.png",
-      "32": "./public/auth0-logo.png",
-      "48": "./public/auth0-logo.png",
-      "128": "./public/auth0-logo.png"
+      "16": "./public/dse-helper-logo.png",
+      "32": "./public/dse-helper-logo.png",
+      "48": "./public/dse-helper-logo.png",
+      "128": "./public/dse-helper-logo.png"
     },
     "permissions": [
       "tabs",
