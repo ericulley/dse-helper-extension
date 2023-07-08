@@ -1,12 +1,3 @@
-interface Req {
-    method: 'GET' | 'POST',
-    headers: {
-        "Authorization": string,
-        "Content-Type": string
-    }, 
-    body?: string
-}
-
 class SalesforceCase {
 
     constructor() {
@@ -49,7 +40,7 @@ class SalesforceCase {
             const platformType = activeTab.getElementsByClassName('slds-form')[3].childNodes[0].childNodes[1].childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].childNodes[0].textContent;
             const layer0 = typeof platformType === 'string' && platformType.length > 0 ? true : false;
 
-            return `ESDTemplate?case:${caseNumber}&tenant=${tenant}&priority=${priority}&layer0=${layer0}`
+            return `ESDTemplate?case=${caseNumber}&tenant=${tenant}&priority=${priority}&layer0=${layer0}`
         } catch (err: any) {
             throw new Error(err);
         }
