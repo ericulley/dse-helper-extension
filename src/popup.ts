@@ -11,13 +11,13 @@ class SalesforceComponent {
         const importedNode = document.importNode(this.templateElement.content, true);
 
         this.element = importedNode.firstElementChild;
-        this.element.id = newElementId;
+        this.element!.id = newElementId;
 
         this.loadElement(insertAtStart);
     };
 
     private loadElement(insertAtBegining: boolean) {
-        this.hostElement.insertAdjacentElement(insertAtBegining ? 'afterbegin' : 'beforeend', this.element);
+        this.hostElement.insertAdjacentElement(insertAtBegining ? 'afterbegin' : 'beforeend', this.element!);
         const createTemplateButton = document.getElementById('create-template-btn') as HTMLButtonElement;
         createTemplateButton.addEventListener('click', () => {});
     };

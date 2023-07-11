@@ -31,7 +31,11 @@
     "content_scripts": [
       {
         "matches": ["https://auth0.lightning.force.com/lightning/r/Case/*"],
-        "js": ["./dist/sf-script.js"]
+        "js": ["./dist/content_scripts/sf-script.js"]
+      },
+      {
+        "matches": ["https://hub.admin.prod.a0core.net/orgs/detail/*"],
+        "js": ["./dist/content_scripts/l0hub-script.js"]
       }
     ]
   }

@@ -4,7 +4,7 @@ class SalesforceCase {
         this.createEsdButton();       
     }
 
-    private createEsdButton = (): void => {
+    private createEsdButton() {
         try {
             // Create button
             const button = document.createElement('li') as HTMLLIElement;
@@ -16,8 +16,8 @@ class SalesforceCase {
             
             // Insert button
             globalMenuNode.insertBefore(button, globalMenuNode.childNodes[1]);
-        } catch (err: any) {
-            throw new Error(err);
+        } catch (err) {
+            console.error(err);
         }
         
     }
@@ -40,7 +40,7 @@ class SalesforceCase {
             const platformType = activeTab.getElementsByClassName('slds-form')[3].childNodes[0].childNodes[1].childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].childNodes[0].textContent;
             const layer0 = typeof platformType === 'string' && platformType.length > 0 ? true : false;
 
-            return `ESDTemplate?case=${caseNumber}&tenant=${tenant}&priority=${priority}&layer0=${layer0}`
+            return `ESDTemplate?casenumber=${caseNumber}&tenant=${tenant}&priority=${priority}&layer0=${layer0}`
         } catch (err: any) {
             throw new Error(err);
         }
@@ -49,13 +49,11 @@ class SalesforceCase {
 
     private createTemplate = async () => {
         console.log("CREATE TEMPLATE START")
-        let token: string
-        let fileName: string;
-        let folderId: string | undefined;
-        let newCopyId: string;
-
+        // Diable button
+        this.loading();
+        
         // Fetch values for file name
-        fileName = this.fetchValues()
+        let fileName: string = this.fetchValues()
         
         // Get Google API token
         chrome.runtime.sendMessage({path: '/services/create-template', fileName: fileName}, (res) => {
@@ -66,6 +64,16 @@ class SalesforceCase {
                 throw new Error("Error: No NewCopy ID");
             }
         });
+    }
+
+    private loading = () => {
+        const button = document.getElementById('create-esd-btn') as HTMLButtonElement;
+        button.disabled = true;
+        button.innerHTML = 'loading...';
+        setTimeout((btn) => {
+            btn.disabled = false;
+            btn.innerHTML = 'ESD';
+        }, 10000, button)
     }
 }
 
