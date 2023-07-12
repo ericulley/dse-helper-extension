@@ -76,4 +76,4 @@ class SalesforceCase {
 setTimeout(() => {
     const supportCase = new SalesforceCase();
 }, 10000);
-//# sourceMappingURL=sf-script.js.map
+//# sourceMappingURL=sf_script.js.map

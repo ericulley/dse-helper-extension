@@ -8,6 +8,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+/*******************
+ *
+ * Helper Functions
+ *
+ *******************/
+/*******************
+ * Google Drive API
+ *******************/
 const checkForFolder = (authToken) => __awaiter(void 0, void 0, void 0, function* () {
     const request = {
         method: 'GET',
@@ -86,9 +94,14 @@ const createFile = (authToken, folder, fileName) => __awaiter(void 0, void 0, vo
         return err;
     }
 });
+/*******************
+ *
+ * Message Listeners
+ *
+ *******************/
 chrome.runtime.onMessage.addListener((req, _sender, res) => {
-    try {
-        if (req.path === '/services/create-template' && req.fileName) {
+    if (req.path === '/services/create-template' && req.fileName) {
+        try {
             chrome.identity.getAuthToken({ interactive: true }, (token) => __awaiter(void 0, void 0, void 0, function* () {
                 if (token) {
                     let newCopyId;
@@ -113,14 +126,20 @@ chrome.runtime.onMessage.addListener((req, _sender, res) => {
             }));
             return true;
         }
-        else {
-            throw new Error("400 Bad Request");
+        catch (error) {
+            console.error(error);
+            res({ error: error });
+            return false;
         }
     }
-    catch (error) {
-        console.error(error);
-        res({ error: error });
-        return false;
-    }
 });
+chrome.runtime.onMessage.addListener((req, _sender, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (req.path === '/api/os-login-autoclose' && req.autoclose) {
+        let [tab] = yield chrome.tabs.query({ active: true, lastFocusedWindow: true });
+        console.log("Tab: ", tab);
+        if (tab && tab.id) {
+            chrome.tabs.remove(tab.id);
+        }
+    }
+}));
 //# sourceMappingURL=service.js.map

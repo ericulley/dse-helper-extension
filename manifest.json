@@ -31,11 +31,15 @@
     "content_scripts": [
       {
         "matches": ["https://auth0.lightning.force.com/lightning/r/Case/*"],
-        "js": ["./dist/content_scripts/sf-script.js"]
+        "js": ["./dist/content_scripts/sf_script.js"]
       },
       {
         "matches": ["https://hub.admin.prod.a0core.net/orgs/detail/*"],
-        "js": ["./dist/content_scripts/l0hub-script.js"]
+        "js": ["./dist/content_scripts/l0_hub_script.js"]
+      },
+      {
+        "matches": ["https://*.pop.prod.a0core.net/"],
+        "js": ["./dist/content_scripts/os_login_autoclose.js"]
       }
     ]
   }
