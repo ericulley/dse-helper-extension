@@ -16,7 +16,7 @@ A Chrome Extension that can help DSEs perform various tasks like creating ESD te
 ## Features
 ### Salesforce
 
-In Salesfoce Cases `https://auth0.lightning.force.com/lightning/r/Case/*/view`, a new ESD button will be added to the top menu bar. When clicked, a new ESD template will be created in your personal Google Drive under a directory labeled `ESD Templates`. This template will include the ESD menu bar options to forward the template contents to Jira Service Desk. 
+In Salesfoce Cases, a new `ESD` button will be added to the top menu bar. When clicked, a new ESD template will be created in your personal Google Drive under a directory labeled `ESD Templates`. This template will include the ESD menu bar options to forward the template contents to Jira Service Desk. 
 
 ### Layer0 Hub
 
