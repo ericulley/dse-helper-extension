@@ -34,8 +34,9 @@
         "js": ["./dist/content_scripts/sf_script.js"]
       },
       {
-        "matches": ["https://hub.admin.prod.a0core.net/orgs/detail/*"],
-        "js": ["./dist/content_scripts/l0_hub_script.js"]
+        "matches": ["https://hub.admin.prod.a0core.net/orgs*"],
+        "js": ["./dist/content_scripts/l0_hub_script.js"],
+        "run_at": "document_end"
       },
       {
         "matches": ["https://*.pop.prod.a0core.net/"],

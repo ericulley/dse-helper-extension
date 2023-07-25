@@ -25,35 +25,43 @@ class SalesforceCase {
                 const layer0 = typeof platformType === 'string' && platformType.length > 0 ? true : false;
                 return `ESDTemplate?casenumber=${caseNumber}&tenant=${tenant}&priority=${priority}&layer0=${layer0}`;
             }
-            catch (err) {
-                throw new Error(err);
+            catch (error) {
+                console.error(error);
             }
         };
         this.createTemplate = () => __awaiter(this, void 0, void 0, function* () {
-            console.log("CREATE TEMPLATE START");
-            // Diable button
-            this.loading();
-            // Fetch values for file name
-            let fileName = this.fetchValues();
-            // Get Google API token
-            chrome.runtime.sendMessage({ path: '/services/create-template', fileName: fileName }, (res) => {
-                console.log("Response:New File ID: ", res);
-                if (res.newCopyId) {
-                    window.open(`https://docs.google.com/document/d/${res.newCopyId}/edit`, '_blank');
-                }
-                else {
-                    throw new Error("Error: No NewCopy ID");
-                }
-            });
+            try {
+                // Diable button
+                this.loading();
+                // Fetch values for file name
+                let fileName = this.fetchValues();
+                // Get Google API token
+                chrome.runtime.sendMessage({ path: '/services/create-template', fileName: fileName }, (res) => {
+                    if (res.newCopyId) {
+                        window.open(`https://docs.google.com/document/d/${res.newCopyId}/edit`, '_blank');
+                    }
+                    else {
+                        throw new Error("Error: No NewCopy ID");
+                    }
+                });
+            }
+            catch (error) {
+                console.error(error);
+            }
         });
         this.loading = () => {
-            const button = document.getElementById('create-esd-btn');
-            button.disabled = true;
-            button.innerHTML = 'loading...';
-            setTimeout((btn) => {
-                btn.disabled = false;
-                btn.innerHTML = 'ESD';
-            }, 10000, button);
+            try {
+                const button = document.getElementById('create-esd-btn');
+                button.disabled = true;
+                button.innerHTML = 'loading...';
+                setTimeout((btn) => {
+                    button.remove();
+                    this.createEsdButton();
+                }, 10000, button);
+            }
+            catch (error) {
+                console.error(error);
+            }
         };
         this.createEsdButton();
     }
@@ -68,12 +76,11 @@ class SalesforceCase {
             // Insert button
             globalMenuNode.insertBefore(button, globalMenuNode.childNodes[1]);
         }
-        catch (err) {
-            console.error(err);
+        catch (error) {
+            console.error(error);
         }
     }
 }
 setTimeout(() => {
-    const supportCase = new SalesforceCase();
-}, 10000);
-//# sourceMappingURL=sf_script.js.map
+    new SalesforceCase();
+}, 15000);

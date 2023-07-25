@@ -35,8 +35,8 @@ const checkForFolder = (authToken) => __awaiter(void 0, void 0, void 0, function
             return undefined;
         }
     }
-    catch (err) {
-        console.error(err);
+    catch (error) {
+        console.error(error);
     }
 });
 const createFolder = (authToken) => __awaiter(void 0, void 0, void 0, function* () {
@@ -62,9 +62,9 @@ const createFolder = (authToken) => __awaiter(void 0, void 0, void 0, function* 
             throw new Error(`Error: ${data}`);
         }
     }
-    catch (err) {
-        console.error(err);
-        return err;
+    catch (error) {
+        console.error(error);
+        return error;
     }
 });
 const createFile = (authToken, folder, fileName) => __awaiter(void 0, void 0, void 0, function* () {
@@ -89,9 +89,9 @@ const createFile = (authToken, folder, fileName) => __awaiter(void 0, void 0, vo
             throw new Error(data);
         }
     }
-    catch (err) {
-        console.error(err);
-        return err;
+    catch (error) {
+        console.error(error);
+        return error;
     }
 });
 /*******************
@@ -142,4 +142,10 @@ chrome.runtime.onMessage.addListener((req, _sender, res) => __awaiter(void 0, vo
         }
     }
 }));
-//# sourceMappingURL=service.js.map
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    if (changeInfo.status && changeInfo.status === 'complete' && tab.url && tab.url.includes('https://hub.admin.prod.a0core.net/orgs/detail/')) {
+        chrome.tabs.sendMessage(tabId, {
+            layer0HubDetailsPage: true
+        });
+    }
+});

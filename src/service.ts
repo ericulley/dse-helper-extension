@@ -39,8 +39,8 @@ const checkForFolder = async (authToken: string): Promise<string | undefined> =>
         } else {
             return undefined;
         }
-    } catch (err) {
-        console.error(err);
+    } catch (error) {
+        console.error(error);
      }
    
 }
@@ -68,9 +68,9 @@ const createFolder = async (authToken: string): Promise<string | Error> => {
         } else {
             throw new Error(`Error: ${data}`);
         }
-    } catch (err) {
-        console.error(err);
-        return err as Error;
+    } catch (error) {
+        console.error(error);
+        return error as Error;
      }
    
 }
@@ -96,9 +96,9 @@ const createFile = async (authToken: string, folder: string, fileName: string): 
         } else {
             throw new Error(data);
         }
-    } catch (err) {
-       console.error(err);
-       return err as Error;
+    } catch (error) {
+       console.error(error);
+       return error as Error;
     }
 }
 
@@ -152,3 +152,11 @@ chrome.runtime.onMessage.addListener(async (req, _sender, res) => {
         }
     }
 });
+
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    if (changeInfo.status && changeInfo.status === 'complete' && tab.url && tab.url.includes('https://hub.admin.prod.a0core.net/orgs/detail/')) {
+        chrome.tabs.sendMessage(tabId, {
+            layer0HubDetailsPage: true
+        });
+    }
+})

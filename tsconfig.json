@@ -6,7 +6,7 @@
         "target": "es6",
         "strict": true,
         "moduleResolution": "Node",
-        "sourceMap": true,
+        // "sourceMap": true,
         "outDir": "dist",
         "baseUrl": ".",
         "paths": {
