@@ -11,4 +11,4 @@ A Chrome Extension that can help DSEs perform various tasks like creating ESD te
 * Click the "Load Unpacked" button on the left-hand side of the screen
 * Select the folder containing the cloned repository
 
-> **Note:** To update the extension in Chrome after making code changes (or pulling the latest changes from the repo), go to the extension settings page, toggle the "On" switch for the extension, and then refresh any open Salesforce Support Center tabs.
+> **Note:** To update the extension in Chrome after making code changes (or pulling the latest changes from the repo), go to the extension settings page, toggle the "On" switch for the extension, and then refresh any open Salesforce Cases or Layer0 Hub tabs.
