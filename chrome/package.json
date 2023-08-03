@@ -1,7 +1,7 @@
 {
   "name": "dse-helper-extension",
   "version": "1.0.0",
-  "description": "",
+  "description": "Chrome extension to perform DSE helper tasks",
   "main": "popup.js",
   "type": "module",
   "scripts": {
