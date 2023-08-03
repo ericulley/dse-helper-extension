@@ -1,5 +1,3 @@
-console.log("sf_script start");
-
 class SalesforceCase {
 
     button: HTMLElement | undefined
