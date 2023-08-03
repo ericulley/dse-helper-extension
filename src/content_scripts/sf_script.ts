@@ -1,25 +1,37 @@
+console.log("sf_script start");
+
 class SalesforceCase {
 
-    constructor() {
-        this.createEsdButton();       
-    }
+    button: HTMLElement | undefined
 
-    private createEsdButton() {
+    createEsdButton = () => {
         try {
             // Create button
-            const button = document.createElement('li') as HTMLLIElement;
-            button.innerHTML = '<button id="create-esd-btn" class="slds-global-actions__item" style="background-color: rgba(0,0,0,0); border-radius: 5px; font-weight: bold">ESD</button>';
-            button.addEventListener('click', this.createTemplate);
+            this.button = document.createElement('li') as HTMLLIElement;
+            this.button.innerHTML = '<button id="create-esd-btn" class="slds-global-actions__item" style="background-color: rgba(0,0,0,0); border-radius: 5px; font-weight: bold">ESD</button>';
+            this.button.addEventListener('click', this.createTemplate);
             
             // Get header menu
             const globalMenuNode = document.getElementsByClassName('slds-global-actions')[0];
             
             // Insert button
-            globalMenuNode.insertBefore(button, globalMenuNode.childNodes[1]);
+            globalMenuNode.insertBefore(this.button, globalMenuNode.childNodes[1]);
         } catch (error) {
             console.error(error);
         }
         
+    }
+
+    deleteEsdButton = () => {
+        try {
+            // const button = document.getElementById('create-esd-btn') as HTMLButtonElement;
+            if (this.button) {
+                this.button.remove();
+            } 
+        } catch (error) {
+            console.error(error);
+        }
+    
     }
 
     private fetchValues = (): string | undefined => {
@@ -73,8 +85,8 @@ class SalesforceCase {
             const button = document.getElementById('create-esd-btn') as HTMLButtonElement;
             button.disabled = true;
             button.innerHTML = 'loading...';
-            setTimeout((btn) => {
-                button.remove();
+            setTimeout(() => {
+                this.deleteEsdButton();
                 this.createEsdButton();
             }, 10000, button)
         } catch (error) {
@@ -83,6 +95,16 @@ class SalesforceCase {
     }
 }
 
-setTimeout(() => {
-    new SalesforceCase();
-}, 15000);
+const salesforceCase = new SalesforceCase();
+
+chrome.runtime.onMessage.addListener((req, _sender, res) => {
+    if (req && req.salesforce && req.caseView) {
+        salesforceCase.deleteEsdButton();
+        salesforceCase.createEsdButton();
+        res("200 Success");
+
+    } else {
+        salesforceCase.deleteEsdButton();
+        res("200 Success");
+    }
+})

@@ -8,8 +8,35 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+console.log("sf_script start");
 class SalesforceCase {
     constructor() {
+        this.createEsdButton = () => {
+            try {
+                // Create button
+                this.button = document.createElement('li');
+                this.button.innerHTML = '<button id="create-esd-btn" class="slds-global-actions__item" style="background-color: rgba(0,0,0,0); border-radius: 5px; font-weight: bold">ESD</button>';
+                this.button.addEventListener('click', this.createTemplate);
+                // Get header menu
+                const globalMenuNode = document.getElementsByClassName('slds-global-actions')[0];
+                // Insert button
+                globalMenuNode.insertBefore(this.button, globalMenuNode.childNodes[1]);
+            }
+            catch (error) {
+                console.error(error);
+            }
+        };
+        this.deleteEsdButton = () => {
+            try {
+                // const button = document.getElementById('create-esd-btn') as HTMLButtonElement;
+                if (this.button) {
+                    this.button.remove();
+                }
+            }
+            catch (error) {
+                console.error(error);
+            }
+        };
         this.fetchValues = () => {
             try {
                 // Get active Salesforce tab
@@ -54,8 +81,8 @@ class SalesforceCase {
                 const button = document.getElementById('create-esd-btn');
                 button.disabled = true;
                 button.innerHTML = 'loading...';
-                setTimeout((btn) => {
-                    button.remove();
+                setTimeout(() => {
+                    this.deleteEsdButton();
                     this.createEsdButton();
                 }, 10000, button);
             }
@@ -63,24 +90,23 @@ class SalesforceCase {
                 console.error(error);
             }
         };
-        this.createEsdButton();
-    }
-    createEsdButton() {
-        try {
-            // Create button
-            const button = document.createElement('li');
-            button.innerHTML = '<button id="create-esd-btn" class="slds-global-actions__item" style="background-color: rgba(0,0,0,0); border-radius: 5px; font-weight: bold">ESD</button>';
-            button.addEventListener('click', this.createTemplate);
-            // Get header menu
-            const globalMenuNode = document.getElementsByClassName('slds-global-actions')[0];
-            // Insert button
-            globalMenuNode.insertBefore(button, globalMenuNode.childNodes[1]);
-        }
-        catch (error) {
-            console.error(error);
-        }
     }
 }
-setTimeout(() => {
-    new SalesforceCase();
-}, 15000);
+const salesforceCase = new SalesforceCase();
+chrome.runtime.onMessage.addListener((req, _sender, res) => {
+    if (req && req.salesforce && req.caseView) {
+        salesforceCase.deleteEsdButton();
+        setTimeout(() => {
+            salesforceCase.createEsdButton();
+            res("200 Success");
+        }, 0);
+    }
+    else {
+        salesforceCase.deleteEsdButton();
+        setTimeout(() => {
+            salesforceCase.deleteEsdButton();
+            res("200 Success");
+        }, 0);
+        res("200 Success");
+    }
+});
