@@ -96,17 +96,11 @@ const salesforceCase = new SalesforceCase();
 chrome.runtime.onMessage.addListener((req, _sender, res) => {
     if (req && req.salesforce && req.caseView) {
         salesforceCase.deleteEsdButton();
-        setTimeout(() => {
-            salesforceCase.createEsdButton();
-            res("200 Success");
-        }, 0);
+        salesforceCase.createEsdButton();
+        res("200 Success");
     }
     else {
         salesforceCase.deleteEsdButton();
-        setTimeout(() => {
-            salesforceCase.deleteEsdButton();
-            res("200 Success");
-        }, 0);
         res("200 Success");
     }
 });
