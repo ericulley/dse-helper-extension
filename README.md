@@ -18,7 +18,7 @@ A Chrome Extension that can help DSEs perform various tasks like creating ESD te
 * Navigate to `about:debugging#/runtime/this-firefox` in Firefox
 * Click the "Load Temporary Add-on..." button on the right-hand side of the screen
 * Navigate the folder containing the cloned repository and select the manifest.json file
-**Add Permissions** 
+* **Add Permissions** 
 * Navigate to `about:addons` in Firefox to view the installed extension
 * View the **Permissions** tab of the extension and enabled all toggles under "Optional permissions for added functionality"
 
@@ -27,8 +27,8 @@ A Chrome Extension that can help DSEs perform various tasks like creating ESD te
 ## Features
 ### Salesforce
 
-In Salesfoce Cases, a new `ESD` button will be added to the top menu bar. When clicked, a new ESD template will be created in your personal Google Drive under a directory labeled `ESD Templates`. This template will include the ESD menu bar options to forward the template contents to Jira Service Desk. 
+In Salesfoce Cases, a new `ESD` button will be added to the top menu bar. When clicked, a new ESD template will be created in your personal Google Drive under a directory labeled `ESD Templates`. This template will include the [ESD menu and commands](https://oktawiki.atlassian.net/wiki/spaces/DS/pages/2605716589/Engineering+Escalation+Template+For+Creating+ESDs) to forward the template data to Jira Service Desk. 
 
 ### Layer0 Hub
 
-In the [Layer0 Hub](https://hub.admin.prod.a0core.net/orgs), two new buttons will be displayed when viewing customer Org. The `Login` button will prompt you to authenticate into the proper region and autoclose upon completion, and the `View Logs` button will open a new tab displaying OpenSearch logs of the space. **These buttons should be clicked in sequence**.
+In the [Layer0 Hub](https://hub.admin.prod.a0core.net/orgs), two new buttons will be displayed when viewing customer Orgs. The `Login` button will prompt you to authenticate into the proper region and autoclose upon completion, and the `View Logs` button will open a new tab displaying OpenSearch logs of the space. **These buttons should be clicked in sequence**.
