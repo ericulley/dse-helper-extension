@@ -1,9 +1,7 @@
-importScripts('sf_services.js');
+importScripts('googleApi.js');
 
 /*******************
- * 
- * Message Listeners
- * 
+ * Listeners
  *******************/
 chrome.runtime.onMessage.addListener((req, _sender, res) => {
     if (req.path === '/services/create-template' && req.fileName) {
@@ -26,7 +24,6 @@ chrome.runtime.onMessage.addListener((req, _sender, res) => {
                     } else {
                         throw new Error("Error: No Folder ID");
                     }
-        
                     res({newCopyId: newCopyId});
                 } else {
                     throw new Error("401 Unauthorized: No Token");

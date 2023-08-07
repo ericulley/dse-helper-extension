@@ -3,7 +3,7 @@
 A Chrome Extension that can help DSEs perform various tasks like creating ESD templates and open Layer0 logs.
 
 ## Installation 
-**To install in Google Chrome:**
+**To install in Chrome:**
 
 * Clone this repository to a folder on your machine
 * Navigate to `chrome://extensions/` in Chrome
@@ -12,6 +12,17 @@ A Chrome Extension that can help DSEs perform various tasks like creating ESD te
 * Select the folder containing the cloned repository
 
 > **Note:** To update the extension in Chrome after making code changes (or pulling the latest changes from the repo), go to the extension settings page, toggle the "On" switch for the extension, and then refresh any open Salesforce Cases or Layer0 Hub tabs.
+
+**To install in Firefox:**
+* Clone this repository to a folder on your machine
+* Navigate to `about:debugging#/runtime/this-firefox` in Firefox
+* Click the "Load Temporary Add-on..." button on the right-hand side of the screen
+* Navigate the folder containing the cloned repository and select the manifest.json file
+**Add Permissions** 
+* Navigate to `about:addons` in Firefox to view the installed extension
+* View the **Permissions** tab of the extension and enabled all toggles under "Optional permissions for added functionality"
+
+> **Note:** To update the extension in Firefox after making code changes (or pulling the latest changes from the repo), go to the extension settings page, toggle the "On" switch for the extension, and then refresh any open Salesforce Cases or Layer0 Hub tabs.
 
 ## Features
 ### Salesforce

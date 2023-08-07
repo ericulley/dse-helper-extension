@@ -1,0 +1,21 @@
+{
+  "name": "dse-helper-extension",
+  "version": "1.0.0",
+  "description": "Chrome extension to perform DSE helper tasks",
+  "main": "popup.js",
+  "type": "module",
+  "scripts": {
+    "build": "rm -rf ./dist && tsc"
+  },
+  "keywords": [],
+  "author": "Eric Culley",
+  "license": "ISC",
+  "dependencies": {
+    "googleapis": "^123.0.0"
+  },
+  "devDependencies": {
+    "@types/firefox-webext-browser": "^111.0.1",
+    "@types/node": "^20.4.6",
+    "typescript": "^5.1.6"
+  }
+}

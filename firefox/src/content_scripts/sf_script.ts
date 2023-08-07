@@ -14,6 +14,7 @@ class SalesforceCase {
             
             // Insert button
             globalMenuNode.insertBefore(this.button, globalMenuNode.childNodes[1]);
+
         } catch (error) {
             console.error(error);
         }
@@ -22,7 +23,6 @@ class SalesforceCase {
 
     deleteEsdButton = () => {
         try {
-            // const button = document.getElementById('create-esd-btn') as HTMLButtonElement;
             if (this.button) {
                 this.button.remove();
             } 
@@ -51,6 +51,7 @@ class SalesforceCase {
             const layer0 = typeof platformType === 'string' && platformType.length > 0 ? true : false;
 
             return `ESDTemplate?casenumber=${caseNumber}&tenant=${tenant}&priority=${priority}&layer0=${layer0}`;
+
         } catch (error) {
             console.error(error);
         }
@@ -66,13 +67,14 @@ class SalesforceCase {
             let fileName = this.fetchValues();
             
             // Get Google API token
-            const res = await browser.runtime.sendMessage({path: '/services/create-template', fileName: fileName})
-            console.log("Response: ", res);
-            if (res.newCopyId) {
-                window.open(`https://docs.google.com/document/d/${res.newCopyId}/edit`, '_blank');
-            } else {
-                throw new Error("Error: No NewCopy ID");
-            }
+            browser.runtime.sendMessage({path: '/services/create-template', fileName: fileName}).then((res) => {
+                console.log("Response: ", res);
+                if (res?.newCopyId) {
+                    window.open(`https://docs.google.com/document/d/${res.newCopyId}/edit`, '_blank');
+                } else {
+                    throw new Error("Error: No NewCopy ID");
+                }
+            });
 
         } catch (error) {
             console.error(error);
@@ -98,10 +100,11 @@ const salesforceCase = new SalesforceCase();
 
 browser.runtime.onMessage.addListener((req, _sender, res) => {
     if (req && req.salesforce && req.caseView) {
-        salesforceCase.deleteEsdButton();
-        salesforceCase.createEsdButton();
-        res("200 Success");
-
+        setTimeout(() => {
+            salesforceCase.deleteEsdButton();
+            salesforceCase.createEsdButton();
+            res("200 Success");
+        }, 3000);
     } else {
         salesforceCase.deleteEsdButton();
         res("200 Success");

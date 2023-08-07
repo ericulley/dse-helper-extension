@@ -1,0 +1,29 @@
+{
+    "manifest_version": 3,
+    "name": "Developer Support Helper Extension",
+    "description": "DSE Helper Extension",
+    "version": "1.0",
+    "action": {
+      "default_popup": "popup.html",
+      "default_icon": "./public/dse-helper-logo.png"
+    },
+    "icons": {
+      "16": "./public/dse-helper-logo.png",
+      "32": "./public/dse-helper-logo.png",
+      "48": "./public/dse-helper-logo.png",
+      "128": "./public/dse-helper-logo.png"
+    },
+    "permissions": [
+      "tabs",
+      "identity"
+    ],
+    "background": {
+      "scripts": ["./dist/service_workers/service.js"]
+    },
+    "content_scripts": [
+      {
+        "matches": ["https://auth0.lightning.force.com/lightning/*"],
+        "js": ["./dist/content_scripts/sf_script.js"]
+      }
+    ]
+  }

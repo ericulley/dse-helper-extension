@@ -80,7 +80,8 @@ const createFile = async (authToken: string, folder: string, fileName: string): 
         method: 'POST',
         body: JSON.stringify({
             name: fileName,
-            parents: [folder]
+            parents: [folder], 
+            permissionIds: ['01913879928154247020k']
         }), 
         headers: {
             'Authorization': `Bearer ${authToken}`,

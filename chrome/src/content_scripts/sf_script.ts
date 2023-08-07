@@ -22,7 +22,6 @@ class SalesforceCase {
 
     deleteEsdButton = () => {
         try {
-            // const button = document.getElementById('create-esd-btn') as HTMLButtonElement;
             if (this.button) {
                 this.button.remove();
             } 
