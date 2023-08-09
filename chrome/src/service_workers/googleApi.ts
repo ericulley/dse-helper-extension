@@ -1,7 +1,5 @@
 /*******************
- * 
  * Type Declarations
- * 
  *******************/
 interface Req {
     method: 'GET' | 'POST',
@@ -12,11 +10,6 @@ interface Req {
     body?: string
 }
 
-/*******************
- * 
- * Helper Functions
- * 
- *******************/
 /*******************
  * Google Drive API
  *******************/

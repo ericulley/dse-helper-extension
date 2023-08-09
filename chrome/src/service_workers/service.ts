@@ -48,6 +48,9 @@ chrome.runtime.onMessage.addListener(async (req, _sender, res) => {
     }
 });
 
+/*******************
+ * Triggers
+ *******************/
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (tabId && changeInfo.status && changeInfo.status === 'complete' && tab.url) {
         // Listen for Layer0 Hub pages
