@@ -1,45 +1,62 @@
 class Layer0Hub {
 
-    constructor() {
-        this.createOpenSearchButtons();       
-    }
+    openSearchLabel?: HTMLHeadElement
+    logsButton?: HTMLElement
+    loginButton?: HTMLElement
 
-    private createOpenSearchButtons() {
+    createOpenSearchButtons() {
         try {
             // Create label
-            const openSearchLabel = document.createElement('h5') as HTMLHeadingElement;
-            openSearchLabel.setAttribute('id', 'open-search-lable');
-            openSearchLabel.setAttribute('class', 'MuiTypography-root general-info MuiTypography-h5');
-            openSearchLabel.setAttribute('style', 'text-align: right; align-self: center; margin: 0 5px');
-            openSearchLabel.innerHTML = 'OpenSearch: ';
+            this.openSearchLabel = document.createElement('h5') as HTMLHeadingElement;
+            this.openSearchLabel.setAttribute('id', 'open-search-lable');
+            this.openSearchLabel.setAttribute('class', 'MuiTypography-root general-info MuiTypography-h5');
+            this.openSearchLabel.setAttribute('style', 'text-align: right; align-self: center; margin: 0 5px');
+            this.openSearchLabel.innerHTML = 'OpenSearch: ';
             
             // Create login button
-            const loginButton = document.createElement('button') as HTMLButtonElement;
-            loginButton.setAttribute('id', 'open-search-login-btn');
-            loginButton.setAttribute('class', 'MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary');
-            loginButton.setAttribute('style', 'margin: 0 5px');
-            loginButton.innerHTML = 'Login';
-            loginButton.addEventListener('click', this.openSearchLogin);
+            this.loginButton = document.createElement('button') as HTMLButtonElement;
+            this.loginButton.setAttribute('id', 'open-search-login-btn');
+            this.loginButton.setAttribute('class', 'MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary');
+            this.loginButton.setAttribute('style', 'margin: 0 5px');
+            this.loginButton.innerHTML = 'Login';
+            this.loginButton.addEventListener('click', this.openSearchLogin);
 
             // Create logs button
-            const logsButton = document.createElement('button') as HTMLButtonElement;
-            logsButton.setAttribute('id', 'open-search-logs-btn');
-            logsButton.setAttribute('class', 'MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary');
-            logsButton.setAttribute('style', 'margin: 0 5px');
-            logsButton.innerHTML = 'View Logs';
-            logsButton.addEventListener('click', this.openSearchLogs);
+            this.logsButton = document.createElement('button') as HTMLButtonElement;
+            this.logsButton.setAttribute('id', 'open-search-logs-btn');
+            this.logsButton.setAttribute('class', 'MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary');
+            this.logsButton.setAttribute('style', 'margin: 0 5px');
+            this.logsButton.innerHTML = 'View Logs';
+            this.logsButton.addEventListener('click', this.openSearchLogs);
             
             // Get header menu
             const generalInformationNode = document.querySelectorAll('div.MuiPaper-root.MuiCard-root.MuiPaper-outlined.MuiPaper-rounded > div.container')[0];
             
             // Insert elements
-            generalInformationNode.appendChild(openSearchLabel);
-            generalInformationNode.appendChild(loginButton);
-            generalInformationNode.appendChild(logsButton);
+            generalInformationNode.appendChild(this.openSearchLabel);
+            generalInformationNode.appendChild(this.loginButton);
+            generalInformationNode.appendChild(this.logsButton);
 
         } catch (error) {
             console.error(error);
         }   
+    }
+
+    deleteOpenSearchButton = () => {
+        try {
+            if (this.openSearchLabel) {
+                this.openSearchLabel.remove();
+            } 
+            if (this.logsButton) {
+                this.logsButton.remove();
+            } 
+            if (this.loginButton) {
+                this.loginButton.remove();
+            } 
+        } catch (error) {
+            console.error(error);
+        }
+    
     }
 
     private getAwsRegion = () => {
@@ -84,11 +101,16 @@ class Layer0Hub {
     }
 }
 
+const layer0Hub = new Layer0Hub;
+
 chrome.runtime.onMessage.addListener((req, _sender, res) => {
     if (req && req.layer0HubDetailsPage) {
         setTimeout(() => {
-            new Layer0Hub();
+            layer0Hub.deleteOpenSearchButton();
+            layer0Hub.createOpenSearchButtons();
             res("200 Success");
         }, 2000);
+    } else {
+        layer0Hub.deleteOpenSearchButton();
     }
 })
