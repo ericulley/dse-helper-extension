@@ -58,7 +58,7 @@ class SalesforceCase {
         
     }
 
-    private createTemplate = async () => {
+    private createTemplate = () => {
         try {
             // Diable button
             this.loading();
@@ -67,7 +67,7 @@ class SalesforceCase {
             let fileName = this.fetchValues();
             
             // Get Google API token
-            browser.runtime.sendMessage({path: '/services/create-template', fileName: fileName}).then((res) => {
+            browser.runtime.sendMessage({path: '/api/create-template', fileName: fileName}).then((res) => {
                 if (res?.newCopyId) {
                     window.open(`https://docs.google.com/document/d/${res.newCopyId}/edit`, '_blank');
                 } else {
