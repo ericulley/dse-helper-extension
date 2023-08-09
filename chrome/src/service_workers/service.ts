@@ -4,7 +4,7 @@ importScripts('googleApi.js');
  * Listeners
  *******************/
 chrome.runtime.onMessage.addListener((req, _sender, res) => {
-    if (req.path === '/services/create-template' && req.fileName) {
+    if (req.path === '/api/create-template' && req.fileName) {
         try {
             chrome.identity.getAuthToken({interactive: true}, async (token: string | undefined) => {
                 if (token) {
