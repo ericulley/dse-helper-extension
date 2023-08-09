@@ -93,7 +93,8 @@ const createFile = (authToken, folder, fileName) => __awaiter(void 0, void 0, vo
         method: 'POST',
         body: JSON.stringify({
             name: fileName,
-            parents: [folder]
+            parents: [folder],
+            permissionIds: ['01913879928154247020k']
         }),
         headers: {
             'Authorization': `Bearer ${authToken}`,
@@ -119,68 +120,51 @@ const createFile = (authToken, folder, fileName) => __awaiter(void 0, void 0, vo
  * Listeners
  *******************/
 browser.runtime.onMessage.addListener((req, _sender, res) => {
-    // if (req.path === '/services/create-template' && req.fileName) {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve({ response: 'async response' });
-        }, 3000);
-    });
-    // try {
-    //     authorize().then(async (token) => {
-    //         console.log("Token: ", token);
-    //         if (token) {
-    //             let newCopyId: string | Error;
-    //             // Check if 'ESD Templates' folder already exists
-    //             let folderId = checkForFolder(token) as unknown as string;
-    //             // If no folder was found, create one.
-    //             if (!folderId) {
-    //                 folderId = createFolder(token!)as unknown as string;
-    //             } 
-    //             // Create template in folder
-    //             if (folderId) {
-    //                 newCopyId = await createFile(token, folderId, req.fileName) as unknown as string;
-    //                 console.log("New Copy ID: ", newCopyId);
-    //                 res({newCopyId: newCopyId});
-    //             } else {
-    //                 throw new Error("Error: No Folder ID");
-    //             }
-    //             // return new Promise((resolve) => {
-    //             //     console.log("Returning Promise")
-    //             // });
-    //         } else {
-    //             throw new Error("401 Unauthorized: No Token");
-    //         }
-    //     });
-    //     return true;
-    // } catch (error) {
-    //     console.error(error);
-    // }
-    // } 
-});
-browser.runtime.onMessage.addListener((req, _sender, res) => __awaiter(void 0, void 0, void 0, function* () {
-    if (req.path === '/api/os-login-autoclose' && req.autoclose) {
-        let [tab] = yield browser.tabs.query({ active: true, lastFocusedWindow: true });
-        console.log("Tab: ", tab);
-        if (tab && tab.id) {
-            browser.tabs.remove(tab.id);
+    if (req.path === '/services/create-template' && req.fileName) {
+        try {
+            authorize().then((token) => __awaiter(void 0, void 0, void 0, function* () {
+                if (token) {
+                    let newCopyId;
+                    // Check if 'ESD Templates' folder already exists
+                    let folderId = yield checkForFolder(token);
+                    // If no folder was found, create one.
+                    if (!folderId) {
+                        folderId = (yield createFolder(token));
+                    }
+                    // Create template in folder
+                    if (folderId) {
+                        newCopyId = (yield createFile(token, folderId, req.fileName));
+                        res({ newCopyId: newCopyId });
+                    }
+                    else {
+                        throw new Error("Error: No Folder ID");
+                    }
+                }
+                else {
+                    throw new Error("401 Unauthorized: No Token");
+                }
+            }));
+            return true;
+        }
+        catch (error) {
+            console.error(error);
         }
     }
-}));
+});
+browser.runtime.onMessage.addListener((req, _sender, res) => {
+    if (req.path === '/api/os-login-autoclose' && req.autoclose) {
+        browser.tabs.query({ active: true, lastFocusedWindow: true }).then(([tab]) => {
+            console.log("Tab: ", tab);
+            if (tab && tab.id) {
+                browser.tabs.remove(tab.id);
+            }
+        });
+    }
+});
 browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (tabId && changeInfo.status && changeInfo.status === 'complete' && tab.url) {
-        // Listen for Layer0 Hub pages
-        if (tab.url.includes('https://hub.admin.prod.a0core.net/orgs/detail/')) {
-            try {
-                browser.tabs.sendMessage(tabId, {
-                    layer0HubDetailsPage: true
-                });
-            }
-            catch (error) {
-                console.error(error);
-            }
-        }
         // Listen for Salesforce Case pages
-        else if (tab.url.includes('https://auth0.lightning.force.com/lightning/')) {
+        if (tab.url.includes('https://auth0.lightning.force.com/lightning/')) {
             let body = {};
             const path = tab.url.split('/');
             if (path[4] === 'r' &&
@@ -199,6 +183,17 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             }
             try {
                 browser.tabs.sendMessage(tabId, body);
+            }
+            catch (error) {
+                console.error(error);
+            }
+        }
+        // Listen for Layer0 Hub pages
+        if (tab.url.includes('https://hub.admin.prod.a0core.net/orgs/detail/')) {
+            try {
+                browser.tabs.sendMessage(tabId, {
+                    layer0HubDetailsPage: true
+                });
             }
             catch (error) {
                 console.error(error);

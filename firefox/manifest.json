@@ -15,7 +15,8 @@
     },
     "permissions": [
       "tabs",
-      "identity"
+      "identity", 
+      "activeTab"
     ],
     "background": {
       "scripts": ["./dist/service_workers/service.js"]

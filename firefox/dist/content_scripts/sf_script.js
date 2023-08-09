@@ -62,7 +62,6 @@ class SalesforceCase {
                 let fileName = this.fetchValues();
                 // Get Google API token
                 browser.runtime.sendMessage({ path: '/services/create-template', fileName: fileName }).then((res) => {
-                    console.log("Response: ", res);
                     if (res === null || res === void 0 ? void 0 : res.newCopyId) {
                         window.open(`https://docs.google.com/document/d/${res.newCopyId}/edit`, '_blank');
                     }
