@@ -24,7 +24,7 @@
     "content_scripts": [
       {
         "matches": ["https://auth0.lightning.force.com/lightning/*"],
-        "js": ["./dist/content_scripts/sf_script.js"]
+        "js": ["./dist/content_scripts/salesforce.js"]
       }, 
       {
         "matches": ["https://hub.admin.prod.a0core.net/orgs*"],
