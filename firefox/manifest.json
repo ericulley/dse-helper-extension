@@ -25,6 +25,15 @@
       {
         "matches": ["https://auth0.lightning.force.com/lightning/*"],
         "js": ["./dist/content_scripts/sf_script.js"]
+      }, 
+      {
+        "matches": ["https://hub.admin.prod.a0core.net/orgs*"],
+        "js": ["./dist/content_scripts/layer0_hub.js"],
+        "run_at": "document_end"
+      },
+      {
+        "matches": ["https://*.pop.prod.a0core.net/"],
+        "js": ["./dist/content_scripts/os_login_autoclose.js"]
       }
     ]
   }

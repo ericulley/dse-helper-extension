@@ -131,7 +131,7 @@ const createFile = async (authToken: string, folder: string, fileName: string): 
  * Listeners
  *******************/
 browser.runtime.onMessage.addListener((req, _sender, res) => {
-    if (req.path === '/services/create-template' && req.fileName) {
+    if (req.path === '/api/create-template' && req.fileName) {
         try {
             authorize().then(async (token) => {
                 if (token) {
@@ -174,7 +174,9 @@ browser.runtime.onMessage.addListener((req, _sender, res) => {
     }
 });
 
-// Trigger content scripts
+/*******************
+ * Triggers
+ *******************/
 browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (tabId && changeInfo.status && changeInfo.status === 'complete' && tab.url) {
 

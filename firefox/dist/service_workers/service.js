@@ -120,7 +120,7 @@ const createFile = (authToken, folder, fileName) => __awaiter(void 0, void 0, vo
  * Listeners
  *******************/
 browser.runtime.onMessage.addListener((req, _sender, res) => {
-    if (req.path === '/services/create-template' && req.fileName) {
+    if (req.path === '/api/create-template' && req.fileName) {
         try {
             authorize().then((token) => __awaiter(void 0, void 0, void 0, function* () {
                 if (token) {
@@ -161,6 +161,9 @@ browser.runtime.onMessage.addListener((req, _sender, res) => {
         });
     }
 });
+/*******************
+ * Triggers
+ *******************/
 browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (tabId && changeInfo.status && changeInfo.status === 'complete' && tab.url) {
         // Listen for Salesforce Case pages
