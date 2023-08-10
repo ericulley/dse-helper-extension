@@ -169,6 +169,7 @@ browser.runtime.onMessage.addListener((req, _sender, res) => {
             console.log("Tab: ", tab);
             if (tab && tab.id) {
                 browser.tabs.remove(tab.id);
+                res("200 OK");
             }
         });
     }
