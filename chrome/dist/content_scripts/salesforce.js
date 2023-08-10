@@ -8,7 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-console.log("sf_script start");
 class SalesforceCase {
     constructor() {
         this.createEsdButton = () => {
@@ -28,7 +27,6 @@ class SalesforceCase {
         };
         this.deleteEsdButton = () => {
             try {
-                // const button = document.getElementById('create-esd-btn') as HTMLButtonElement;
                 if (this.button) {
                     this.button.remove();
                 }
@@ -63,7 +61,7 @@ class SalesforceCase {
                 // Fetch values for file name
                 let fileName = this.fetchValues();
                 // Get Google API token
-                chrome.runtime.sendMessage({ path: '/services/create-template', fileName: fileName }, (res) => {
+                chrome.runtime.sendMessage({ path: '/api/create-template', fileName: fileName }, (res) => {
                     if (res.newCopyId) {
                         window.open(`https://docs.google.com/document/d/${res.newCopyId}/edit`, '_blank');
                     }

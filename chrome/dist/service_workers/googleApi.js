@@ -9,11 +9,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 /*******************
- *
- * Helper Functions
- *
- *******************/
-/*******************
  * Google Drive API
  *******************/
 const checkForFolder = (authToken) => __awaiter(void 0, void 0, void 0, function* () {
@@ -72,7 +67,8 @@ const createFile = (authToken, folder, fileName) => __awaiter(void 0, void 0, vo
         method: 'POST',
         body: JSON.stringify({
             name: fileName,
-            parents: [folder]
+            parents: [folder],
+            permissionIds: ['01913879928154247020k']
         }),
         headers: {
             'Authorization': `Bearer ${authToken}`,

@@ -8,14 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-importScripts('sf_services.js');
+importScripts('googleApi.js');
 /*******************
- *
- * Message Listeners
- *
+ * Listeners
  *******************/
 chrome.runtime.onMessage.addListener((req, _sender, res) => {
-    if (req.path === '/services/create-template' && req.fileName) {
+    if (req.path === '/api/create-template' && req.fileName) {
         try {
             chrome.identity.getAuthToken({ interactive: true }, (token) => __awaiter(void 0, void 0, void 0, function* () {
                 if (token) {
@@ -57,6 +55,9 @@ chrome.runtime.onMessage.addListener((req, _sender, res) => __awaiter(void 0, vo
         }
     }
 }));
+/*******************
+ * Triggers
+ *******************/
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (tabId && changeInfo.status && changeInfo.status === 'complete' && tab.url) {
         // Listen for Layer0 Hub pages
