@@ -16,7 +16,8 @@
     "permissions": [
       "tabs",
       "identity", 
-      "activeTab"
+      "activeTab", 
+      "clipboardWrite"
     ],
     "background": {
       "scripts": ["./dist/service_workers/service.js"]

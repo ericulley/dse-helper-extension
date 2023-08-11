@@ -2,6 +2,7 @@ class SalesforceCase {
 
     esdButton?: HTMLElement;
     layer0HubButton?: HTMLElement;
+    rda?: string;
 
     createEsdButton = () => {
         try {
@@ -27,7 +28,7 @@ class SalesforceCase {
             // Create Layer0 Hub button
             this.layer0HubButton = document.createElement('li') as HTMLLIElement;
             this.layer0HubButton.innerHTML = '<button id="open-layer0-hub-btn" class="slds-button slds-button_neutral">Layer0 Hub</button>';
-            this.layer0HubButton.addEventListener('click', ()=>{window.open('https://hub.admin.prod.a0core.net/orgs', '_blank', 'noopener');});
+            this.layer0HubButton.addEventListener('click', this.openLayer0Hub);
     
             // Get case menu
             const caseMenuNode = document.getElementsByClassName('slds-button-group-list').item(0) as HTMLElement;
@@ -35,8 +36,9 @@ class SalesforceCase {
             // Get platform type
             const activeTab = document.getElementsByClassName('split-right')[0].querySelectorAll('section.tabContent.oneConsoleTab.active[aria-expanded="true"] > div[aria-expanded="true"]')[0];
 
-            const platformType = activeTab.getElementsByClassName('slds-form')[3].childNodes[0].childNodes[1].childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].childNodes[0].textContent;
+            const platformType = activeTab?.getElementsByClassName('slds-form')[3]?.childNodes[0]?.childNodes[1]?.childNodes[0]?.childNodes[0]?.childNodes[0]?.childNodes[0]?.childNodes[1]?.childNodes[0]?.childNodes[0]?.childNodes[0]?.textContent;
             const layer0 = typeof platformType === 'string' && platformType.length > 0 ? true : false;
+            this.rda = platformType?.split('.').splice(1).join('.');
     
             // Insert button
             if (layer0) {
@@ -58,7 +60,15 @@ class SalesforceCase {
         } catch (error) {
             console.error(error);
         }
-    
+    }
+
+    private openLayer0Hub = () => {
+        // Open Layer0 Hub & copy RDA to clipboard
+        if (this.rda) {
+            navigator.clipboard.writeText(this.rda).then(() => {
+                window.open('https://hub.admin.prod.a0core.net/orgs', '_blank', 'noopener');
+            });
+        } 
     }
 
     private fetchValues = (): string | undefined => {
@@ -80,11 +90,9 @@ class SalesforceCase {
             const layer0 = typeof platformType === 'string' && platformType.length > 0 ? true : false;
 
             return `ESDTemplate?casenumber=${caseNumber}&tenant=${tenant}&priority=${priority}&layer0=${layer0}`;
-
         } catch (error) {
             console.error(error);
-        }
-        
+        }    
     }
 
     private createTemplate = () => {
@@ -103,7 +111,6 @@ class SalesforceCase {
                     throw new Error("Error: No NewCopy ID");
                 }
             });
-
         } catch (error) {
             console.error(error);
         }
@@ -134,7 +141,7 @@ browser.runtime.onMessage.addListener((req, _sender, res) => {
             salesforceCase.createEsdButton();
             salesforceCase.createLayer0HubButton();
             res("200 Success");
-        }, 5000);
+        }, 3000);
     } else {
         salesforceCase.deleteButtons();
         res("200 Success");
