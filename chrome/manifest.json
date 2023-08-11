@@ -15,7 +15,8 @@
     },
     "permissions": [
       "tabs",
-      "identity"
+      "identity", 
+      "clipboardWrite"
     ],
     "oauth2": {
       "client_id": "30946108485-25fvbu1v7hmgcfd7h698ik1m86ib8tl8.apps.googleusercontent.com",
@@ -35,8 +36,7 @@
       },
       {
         "matches": ["https://hub.admin.prod.a0core.net/orgs*"],
-        "js": ["./dist/content_scripts/layer0_hub.js"],
-        "run_at": "document_end"
+        "js": ["./dist/content_scripts/layer0_hub.js"]
       },
       {
         "matches": ["https://*.pop.prod.a0core.net/"],
