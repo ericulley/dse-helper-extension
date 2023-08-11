@@ -21,7 +21,7 @@ A Chrome Extension that can help DSEs perform various tasks like creating ESD te
 * **Add Permissions** 
 * Navigate to `about:addons` in Firefox to view the installed extension
 * View the **Permissions** tab of the extension and enabled all toggles under "Optional permissions for added functionality"
-* Lastly, send a copy of the Extension ID to `@Eric Culley` to have it included in Google's allowed redirects. 
+* Lastly, during the first authentication with Google, a redirecit_uri error will be thrown. Copy the redirect_uri from the details of the error message and send a copy to `@Eric Culley` to have it included in the allowed redirects. 
 
 > **Note:** To update the extension in Firefox after making code changes (or pulling the latest changes from the repo), go to the extension settings page, toggle the "On" switch for the extension, and then refresh any open Salesforce Cases or Layer0 Hub tabs.
 
