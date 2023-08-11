@@ -5,13 +5,13 @@
     "version": "1.0",
     "action": {
       "default_popup": "popup.html",
-      "default_icon": "./public/dse-helper-logo.png"
+      "default_icon": "./public/dse-helper-square.png"
     },
     "icons": {
-      "16": "./public/dse-helper-logo.png",
-      "32": "./public/dse-helper-logo.png",
-      "48": "./public/dse-helper-logo.png",
-      "128": "./public/dse-helper-logo.png"
+      "16": "./public/dse-helper-square.png",
+      "32": "./public/dse-helper-square.png",
+      "48": "./public/dse-helper-square.png",
+      "128": "./public/dse-helper-square.png"
     },
     "permissions": [
       "tabs",
