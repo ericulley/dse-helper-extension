@@ -115,7 +115,7 @@ class SalesforceCase {
                                 if (rootDomainAuthority) {
                                     createLayer0HubLink(rootDomainAuthority);
                                 } else {
-                                    throw new Error('No Root Domain Authority')
+                                    console.log('No Root Domain Authority found');
                                 }
                             }, 3000);
                         }
