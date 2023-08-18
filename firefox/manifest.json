@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Developer Support Helper Extension",
-    "description": "DSE Helper Extension",
+    "description": "DSE Helper Extension - Dev",
     "version": "1.0",
     "action": {
       "default_popup": "popup.html",
@@ -19,6 +19,11 @@
       "activeTab", 
       "clipboardWrite"
     ],
+    "browser_specific_settings": {
+      "gecko": {
+        "id": "dse-helper-extension@auth0.com"
+      }
+    },
     "background": {
       "scripts": ["./dist/service_workers/service.js"]
     },
@@ -35,6 +40,10 @@
       {
         "matches": ["https://*.pop.prod.a0core.net/"],
         "js": ["./dist/content_scripts/os_login_autoclose.js"]
+      },
+      {
+        "matches": ["https://support.it.auth0.com/inspector/*"],
+        "js": ["./dist/content_scripts/inspector.js"]
       }
     ]
   }
