@@ -38,3 +38,5 @@ A Chrome Extension that can help DSEs perform various tasks like creating ESD te
 * In the [Layer0 Hub](https://hub.admin.prod.a0core.net/orgs), two new buttons will be displayed when viewing customer Orgs. The `Login` button will prompt you to authenticate into the proper region and autoclose the login tab upon completion (this autoclose feature is blocked in Firefox), and the `View Logs` button will open a new tab displaying OpenSearch logs of the space. **These buttons should be clicked in sequence**. <img src="/images/Screenshot%202023-08-18%20at%2012.37.00%20AM.png/?raw=true" alt="OpenSearch Buttons" width="800"/>
 
 ## Contributing
+
+If you would like to contribute, you must be a member of the `Developer Support Engineer` team in GitHub. To be added, you'll need to request access via a Lighthouse ticket. 
