@@ -1,9 +1,8 @@
 class SalesforceCase {
 
     esdButton?: HTMLElement;
-    layer0HubButton?: HTMLElement;
-    rda?: string;
 
+    // Add button to menu
     createEsdButton = () => {
         try {
             // Create ESD button
@@ -23,54 +22,7 @@ class SalesforceCase {
         
     }
 
-    createLayer0HubButton = () => {
-        try {
-            // Create Layer0 Hub button
-            this.layer0HubButton = document.createElement('li') as HTMLLIElement;
-            this.layer0HubButton.innerHTML = '<button id="open-layer0-hub-btn" class="slds-button slds-button_neutral">Layer0 Hub</button>';
-            this.layer0HubButton.addEventListener('click', this.openLayer0Hub);
-    
-            // Get case menu
-            const caseMenuNode = document.getElementsByClassName('slds-button-group-list').item(0) as HTMLElement;
-
-            // Get platform type
-            const activeTab = document.getElementsByClassName('split-right')[0].querySelectorAll('section.tabContent.oneConsoleTab.active[aria-expanded="true"] > div[aria-expanded="true"]')[0];
-
-            const platformType = activeTab?.getElementsByClassName('slds-form')[3]?.childNodes[0]?.childNodes[1]?.childNodes[0]?.childNodes[0]?.childNodes[0]?.childNodes[0]?.childNodes[1]?.childNodes[0]?.childNodes[0]?.childNodes[0]?.textContent;
-            const layer0 = typeof platformType === 'string' && platformType.length > 0 ? true : false;
-            this.rda = platformType?.split('.').splice(1).join('.');
-    
-            // Insert button
-            if (layer0) {
-                caseMenuNode?.insertBefore(this.layer0HubButton, caseMenuNode.childNodes[4]);
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
-    deleteButtons = () => {
-        try {
-            if (this.esdButton) {
-                this.esdButton.remove();
-            } 
-            if (this.layer0HubButton) {
-                this.layer0HubButton.remove();
-            } 
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
-    private openLayer0Hub = () => {
-        // Open Layer0 Hub & copy RDA to clipboard
-        if (this.rda) {
-            navigator.clipboard.writeText(this.rda).then(() => {
-                window.open('https://hub.admin.prod.a0core.net/orgs', '_blank', 'noopener');
-            });
-        } 
-    }
-
+    // Get the case values for ESD
     private fetchValues = (): string | undefined => {
         try {
             // Get active Salesforce tab
@@ -95,6 +47,7 @@ class SalesforceCase {
         }    
     }
 
+    // Create ESD template
     private createTemplate = () => {
         try {
             // Diable button
@@ -116,6 +69,76 @@ class SalesforceCase {
         }
     }
 
+     // Add Layer0 Hub link
+     checkRootDomainAuthority = () => {
+        // Check for Root Domain Authority value
+        const checkForPlatform = (): [HTMLElement, string] | undefined => {
+            const activeTab = document.getElementsByClassName('split-right')[0].querySelectorAll('section.tabContent.oneConsoleTab.active[aria-expanded="true"] > div[aria-expanded="true"]')[0];
+
+            const rdaNode = activeTab?.getElementsByClassName('slds-form')[3]?.childNodes[0]?.childNodes[1]?.childNodes[0]?.childNodes[0]?.childNodes[0]?.childNodes[0]?.childNodes[1]?.childNodes[0]?.childNodes[0]?.childNodes[0] as HTMLElement;
+
+            const domain: string = rdaNode.innerText;
+            if (domain && domain.length > 0) {
+                return [rdaNode, domain];
+            } else {
+                return undefined;
+            } 
+        }
+
+        // Create link to Layer0 Hub and copy domain to clipboard
+        const createLayer0HubLink = (rda: [HTMLElement, string]) => {
+            rda[0].innerHTML = `<a>${rda[1]}</a>`;
+            rda[0].addEventListener('click', () => {
+                // Trim off 'config'
+                const domain = rda[1].split('.').splice(1).join('.');
+                navigator.clipboard.writeText(domain).then(() => {
+                    window.open('https://hub.admin.prod.a0core.net/orgs', '_blank', 'noopener');
+                });
+            })
+        }
+
+        let rootDomainAuthority: [HTMLElement, string] | undefined;
+        // Periodically check for RDA value and add link
+        try {
+            setTimeout(() => {
+                rootDomainAuthority = checkForPlatform();
+                if (rootDomainAuthority) {
+                    createLayer0HubLink(rootDomainAuthority);
+                } else {
+                    setTimeout(() => {
+                        rootDomainAuthority = checkForPlatform();
+                        if (rootDomainAuthority) {
+                            createLayer0HubLink(rootDomainAuthority);
+                        } else {
+                            setTimeout(() => {
+                                rootDomainAuthority = checkForPlatform();
+                                if (rootDomainAuthority) {
+                                    createLayer0HubLink(rootDomainAuthority);
+                                } else {
+                                    throw new Error('No Root Domain Authority')
+                                }
+                            }, 3000);
+                        }
+                    }, 3000);
+                }
+            }, 3000)
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    // Remove all buttons
+    deleteButtons = () => {
+        try {
+            if (this.esdButton) {
+                this.esdButton.remove();
+            } 
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    // Temporarily disable ESD button
     private loading = () => {
         try {
             const button = document.getElementById('create-esd-btn') as HTMLButtonElement;
@@ -124,7 +147,6 @@ class SalesforceCase {
             setTimeout(() => {
                 this.deleteButtons();
                 this.createEsdButton();
-                this.createLayer0HubButton();
             }, 10000, button)
         } catch (error) {
             console.error(error);
@@ -139,7 +161,7 @@ browser.runtime.onMessage.addListener((req, _sender, res) => {
         setTimeout(() => {
             salesforceCase.deleteButtons();
             salesforceCase.createEsdButton();
-            salesforceCase.createLayer0HubButton();
+            salesforceCase.checkRootDomainAuthority();
             res("200 Success");
         }, 3000);
     } else {
