@@ -34,18 +34,16 @@ A Chrome Extension that can help DSEs perform various tasks like creating ESD te
 
 * In Salesfoce Cases, a new `ESD` button will be added to the top menu bar. When clicked, a new ESD template will be created in your personal Google Drive under a directory labeled `ESD Templates`. This template will include the [ESD menu and commands](https://oktawiki.atlassian.net/wiki/spaces/DS/pages/2605716589/Engineering+Escalation+Template+For+Creating+ESDs) to forward the template data to Jira Service Desk. 
 
-![](/images/Screenshot%202023-08-18%20at%2012.32.15%20AM.png/?raw=true "ESD Button")
+<img src="/images/Screenshot%202023-08-18%20at%2012.32.15%20AM.png/?raw=true" alt="ESD Button" width="400"/>
 
 * When the extenions detects a Private Cloud customer (a Root Domain Authority value exists), a link to the Layer0 Hub will be created and the domain of the layer0 space will be copied to your clipboard when the link is followed. 
 
-![](/images/Screenshot%202023-08-18%20at%2012.35.12%20AM.png/?raw=true "Layer0 Hub Link")
-
-<img src="/images/Screenshot%202023-08-18%20at%2012.35.12%20AM.png/?raw=true" alt="Layer0 Hub Link" width="200"/>
+<img src="/images/Screenshot%202023-08-18%20at%2012.35.12%20AM.png/?raw=true" alt="Layer0 Hub Link" width="400"/>
 
 ### Layer0 Hub
 
 * In the [Layer0 Hub](https://hub.admin.prod.a0core.net/orgs), two new buttons will be displayed when viewing customer Orgs. The `Login` button will prompt you to authenticate into the proper region and autoclose the login tab upon completion (this autoclose feature is blocked in Firefox), and the `View Logs` button will open a new tab displaying OpenSearch logs of the space. **These buttons should be clicked in sequence**.
 
-![](/images/Screenshot%202023-08-18%20at%2012.37.00%20AM.png/?raw=true "OpenSearch Buttons")
+<img src="/images/Screenshot%202023-08-18%20at%2012.37.00%20AM.png/?raw=true" alt="OpenSearch Buttons" width="400"/>
 
 ## Contributing
