@@ -38,8 +38,12 @@ A Chrome Extension that can help DSEs perform various tasks like creating ESD te
 
 * When the extenions detects a Private Cloud customer (a Root Domain Authority value exists), a link to the Layer0 Hub will be created and the domain of the layer0 space will be copied to your clipboard when the link is followed. 
 
+![](/images/Screenshot%202023-08-18%20at%2012.35.12%20AM.png/?raw=true "Layer0 Hub Link")
+
 ### Layer0 Hub
 
 * In the [Layer0 Hub](https://hub.admin.prod.a0core.net/orgs), two new buttons will be displayed when viewing customer Orgs. The `Login` button will prompt you to authenticate into the proper region and autoclose the login tab upon completion (this autoclose feature is blocked in Firefox), and the `View Logs` button will open a new tab displaying OpenSearch logs of the space. **These buttons should be clicked in sequence**.
+
+![](/images/Screenshot%202023-08-18%20at%2012.37.00%20AM.png/?raw=true "OpenSearch Buttons")
 
 ## Contributing
