@@ -11,11 +11,7 @@ A Chrome Extension that can help DSEs perform various tasks like creating ESD te
 * Click the "Load Unpacked" button on the left-hand side of the screen
 * Select the folder containing the cloned repository
 
-> **Note:** To update the extension in Chrome, `cd` into the parent directory and pull down the latest version with the following command:
->```
-> git pull origin main
-> ```
-> Then go to the extension settings page in Chrome, toggle the "On" switch for the extension, and then refresh any open Salesforce Cases or Layer0 Hub tabs.
+> **Note:** To update the extension in Chrome, `cd` into the parent directory and pull down the latest version with `git pull origin main`. Then go to the extension settings page in Chrome, toggle the "On" switch for the extension, and then refresh any open Salesforce Cases or Layer0 Hub tabs.
 
 **To install in Firefox:**
 * Clone this repository to a folder on your machine
@@ -38,7 +34,7 @@ A Chrome Extension that can help DSEs perform various tasks like creating ESD te
 
 * When the extenions detects a Private Cloud customer (a Root Domain Authority value exists), a link to the Layer0 Hub will be created and the domain of the layer0 space will be copied to your clipboard when the link is followed. 
 
-<img src="/images/Screenshot%202023-08-18%20at%2012.35.12%20AM.png/?raw=true" alt="Layer0 Hub Link" width="400" style="margin: 0 auto;"/>
+<img src="/images/Screenshot%202023-08-18%20at%2012.35.12%20AM.png/?raw=true" alt="Layer0 Hub Link" width="400"/>
 
 ### Layer0 Hub
 
