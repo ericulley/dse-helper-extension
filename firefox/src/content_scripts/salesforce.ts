@@ -69,8 +69,8 @@ class SalesforceCase {
         }
     }
 
-     // Add Layer0 Hub link
-     checkRootDomainAuthority = () => {
+    // Add Layer0 Hub link
+    checkRootDomainAuthority = () => {
         // Check for Root Domain Authority value
         const checkForPlatform = (): [HTMLElement, string] | undefined => {
             const activeTab = document.getElementsByClassName('split-right')[0].querySelectorAll('section.tabContent.oneConsoleTab.active[aria-expanded="true"] > div[aria-expanded="true"]')[0];
