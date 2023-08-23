@@ -9,7 +9,7 @@ A Chrome Extension that can help DSEs perform various tasks like creating ESD te
 * Navigate to `chrome://extensions/` in Chrome
 * Ensure that "Developer Mode" is toggled in the upper right-hand corner
 * Click the "Load Unpacked" button on the left-hand side of the screen
-* Select the folder containing the cloned repository
+* Select the `chrome` folder from the cloned repository
 
 > **Note:** To update the extension in Chrome, `cd` into the parent directory and pull down the latest version with `git pull origin main`. Then go to the extension settings page in Chrome, toggle the "On" switch for the extension, and then refresh any open Salesforce Cases or Layer0 Hub tabs.
 
