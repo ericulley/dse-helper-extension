@@ -17,45 +17,59 @@ class Layer0Hub {
                 console.error(error);
             }
         };
-        this.getAwsRegion = () => {
+        this.getCloudRegion = () => {
             try {
                 const cloudDeploymentSection = document.querySelectorAll('ul')[4];
+                const cloudProviderSpan = cloudDeploymentSection.querySelectorAll('li span')[3];
+                const provider = cloudProviderSpan.innerText.toLowerCase();
                 const primaryRegionLabel = cloudDeploymentSection.querySelectorAll('li')[2];
                 const primaryRegion = primaryRegionLabel.querySelectorAll('span')[1].innerText;
-                const awsRegion = primaryRegion.split(' ')[0];
-                return awsRegion;
+                const region = primaryRegion.split('(')[0].replace(/\s/g, '');
+                ;
+                if (provider && region) {
+                    return { provider: provider, region: region };
+                }
+                else {
+                    throw new Error("Error: No cloud provider or region found.");
+                }
             }
             catch (error) {
                 console.error(error);
+                return undefined;
             }
         };
         this.getSpace = () => {
             try {
                 const selectElement = document.querySelectorAll('select')[0];
-                const space = selectElement.querySelectorAll('option[aria-selected="true"]')[0].innerHTML;
-                return space;
+                const spaceName = selectElement.querySelectorAll('option[aria-selected="true"]')[0].innerHTML;
+                const generalInformationSection = document.querySelectorAll('ul')[1];
+                const spaceDomain = generalInformationSection.querySelectorAll('li span strong')[0].innerHTML;
+                return { name: spaceName, domain: spaceDomain };
             }
             catch (error) {
                 console.error(error);
             }
         };
         this.openSearchLogin = () => {
-            const region = this.getAwsRegion();
-            if (region) {
-                window.open(`https://logs.admin.pop-aws-${region}.pop.prod.a0core.net`, '_blank', 'noopener');
+            const cloud = this.getCloudRegion();
+            if (cloud && cloud.provider && cloud.region) {
+                window.open(`https://logs.admin.pop-${cloud.provider}-${cloud.region}.pop.prod.a0core.net`, '_blank', 'noopener');
             }
             else {
                 console.error("Error: No Region");
             }
         };
         this.openSearchLogs = () => {
-            const region = this.getAwsRegion();
+            const cloud = this.getCloudRegion();
             const space = this.getSpace();
-            if (region && space) {
-                window.open(`https://logs.admin.pop-aws-${region}.pop.prod.a0core.net/_dashboards/app/discover#/?_a=(columns:!(log_type,operation,res.status_code,req.ip,space,tenant),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:logs_server,key:space,negate:!f,params:(query:${space}),type:phrase),query:(match_phrase:(space:${space})))),index:logs_server,interval:auto,query:(language:kuery,query:''),sort:!())&_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-7d,to:now))`, '_blank', 'noopener');
+            if (cloud && cloud.provider === 'aws' && cloud.region && space) {
+                window.open(`https://logs.admin.pop-aws-${cloud.region}.pop.prod.a0core.net/_dashboards/app/discover#/?_a=(columns:!(log_type,operation,res.status_code,req.ip,space,tenant),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:logs_server,key:space,negate:!f,params:(query:${space.name}),type:phrase),query:(match_phrase:(space:${space.name})))),index:logs_server,interval:auto,query:(language:kuery,query:''),sort:!())&_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-7d,to:now))`, '_blank', 'noopener');
+            }
+            else if ((cloud === null || cloud === void 0 ? void 0 : cloud.provider) === 'azure' && cloud.region && space) {
+                window.open(`https://logs.admin.pop-azure-${cloud.region}.pop.prod.a0core.net/app/discover#/?_a=(columns:!(operation,res.status_code,req.ip,space,tenant),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:logs,key:space,negate:!f,params:(query:${space.domain}),type:phrase),query:(match_phrase:(space:${space.domain})))),index:logs,interval:auto,query:(language:kuery,query:''),sort:!())&_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-1w,to:now))`, '_blank', 'noopener');
             }
             else {
-                console.error("Error: No Region or Space");
+                console.error("Error: No Provider, Region, or Space");
             }
         };
     }
