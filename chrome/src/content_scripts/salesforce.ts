@@ -26,7 +26,7 @@ class SalesforceCase {
     private fetchValues = (): string | undefined => {
         try {
             // Get active Salesforce tab
-            const activeTab = document.getElementsByClassName('split-right')[0].querySelectorAll('section.tabContent.oneConsoleTab.active[aria-expanded="true"] > div[aria-expanded="true"]')[0];
+            const activeTab = document.getElementsByClassName('split-right')[0].querySelectorAll('section.tabContent.oneConsoleTab.active[aria-expanded="true"] > div.active')[0];
 
             // Get case number
             const caseNumber = activeTab.getElementsByClassName('slds-form')[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].childNodes[0].textContent;
@@ -73,7 +73,7 @@ class SalesforceCase {
     checkRootDomainAuthority = () => {
         // Check for Root Domain Authority value
         const checkForPlatform = (): [HTMLElement, string] | undefined => {
-            const activeTab = document.getElementsByClassName('split-right')[0].querySelectorAll('section.tabContent.oneConsoleTab.active[aria-expanded="true"] > div[aria-expanded="true"]')[0];
+            const activeTab = document.getElementsByClassName('split-right')[0].querySelectorAll('section.tabContent.oneConsoleTab.active[aria-expanded="true"] > div.active')[0];
 
             const rdaNode = activeTab?.getElementsByClassName('slds-form')[3]?.childNodes[0]?.childNodes[1]?.childNodes[0]?.childNodes[0]?.childNodes[0]?.childNodes[0]?.childNodes[1]?.childNodes[0]?.childNodes[0]?.childNodes[0] as HTMLElement;
 

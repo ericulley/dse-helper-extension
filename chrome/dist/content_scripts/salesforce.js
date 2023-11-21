@@ -21,7 +21,7 @@ class SalesforceCase {
         this.fetchValues = () => {
             try {
                 // Get active Salesforce tab
-                const activeTab = document.getElementsByClassName('split-right')[0].querySelectorAll('section.tabContent.oneConsoleTab.active[aria-expanded="true"] > div[aria-expanded="true"]')[0];
+                const activeTab = document.getElementsByClassName('split-right')[0].querySelectorAll('section.tabContent.oneConsoleTab.active[aria-expanded="true"] > div.active')[0];
                 // Get case number
                 const caseNumber = activeTab.getElementsByClassName('slds-form')[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].childNodes[0].textContent;
                 // Get tenant name
@@ -63,7 +63,7 @@ class SalesforceCase {
             // Check for Root Domain Authority value
             const checkForPlatform = () => {
                 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
-                const activeTab = document.getElementsByClassName('split-right')[0].querySelectorAll('section.tabContent.oneConsoleTab.active[aria-expanded="true"] > div[aria-expanded="true"]')[0];
+                const activeTab = document.getElementsByClassName('split-right')[0].querySelectorAll('section.tabContent.oneConsoleTab.active[aria-expanded="true"] > div.active')[0];
                 const rdaNode = (_k = (_j = (_h = (_g = (_f = (_e = (_d = (_c = (_b = (_a = activeTab === null || activeTab === void 0 ? void 0 : activeTab.getElementsByClassName('slds-form')[3]) === null || _a === void 0 ? void 0 : _a.childNodes[0]) === null || _b === void 0 ? void 0 : _b.childNodes[1]) === null || _c === void 0 ? void 0 : _c.childNodes[0]) === null || _d === void 0 ? void 0 : _d.childNodes[0]) === null || _e === void 0 ? void 0 : _e.childNodes[0]) === null || _f === void 0 ? void 0 : _f.childNodes[0]) === null || _g === void 0 ? void 0 : _g.childNodes[1]) === null || _h === void 0 ? void 0 : _h.childNodes[0]) === null || _j === void 0 ? void 0 : _j.childNodes[0]) === null || _k === void 0 ? void 0 : _k.childNodes[0];
                 const domain = rdaNode.innerText;
                 if (domain && domain.length > 0) {
