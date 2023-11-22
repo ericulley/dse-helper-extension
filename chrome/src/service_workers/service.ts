@@ -63,7 +63,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
                 console.error(error);
             }
         }
-    
+        
         // Listen for Salesforce Case pages
         else if (tab.url.includes('https://auth0.lightning.force.com/lightning/')) {
             let body = {}

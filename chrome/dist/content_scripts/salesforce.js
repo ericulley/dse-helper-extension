@@ -62,12 +62,19 @@ class SalesforceCase {
         this.checkRootDomainAuthority = () => {
             // Check for Root Domain Authority value
             const checkForPlatform = () => {
-                var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
                 const activeTab = document.getElementsByClassName('split-right')[0].querySelectorAll('section.tabContent.oneConsoleTab.active[aria-expanded="true"] > div.active')[0];
-                const rdaNode = (_k = (_j = (_h = (_g = (_f = (_e = (_d = (_c = (_b = (_a = activeTab === null || activeTab === void 0 ? void 0 : activeTab.getElementsByClassName('slds-form')[3]) === null || _a === void 0 ? void 0 : _a.childNodes[0]) === null || _b === void 0 ? void 0 : _b.childNodes[1]) === null || _c === void 0 ? void 0 : _c.childNodes[0]) === null || _d === void 0 ? void 0 : _d.childNodes[0]) === null || _e === void 0 ? void 0 : _e.childNodes[0]) === null || _f === void 0 ? void 0 : _f.childNodes[0]) === null || _g === void 0 ? void 0 : _g.childNodes[1]) === null || _h === void 0 ? void 0 : _h.childNodes[0]) === null || _j === void 0 ? void 0 : _j.childNodes[0]) === null || _k === void 0 ? void 0 : _k.childNodes[0];
-                const domain = rdaNode.innerText;
-                if (domain && domain.length > 0) {
-                    return [rdaNode, domain];
+                // Get Tenant
+                const tenant = activeTab.getElementsByClassName('slds-form')[0].childNodes[0].childNodes[5].childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].childNodes[0].textContent;
+                // Get Host Enviroment
+                const hostEnvironment = activeTab.getElementsByClassName('slds-form')[0].childNodes[0].childNodes[6].childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].childNodes[0].textContent;
+                // Get for Root Domain Authority
+                const rdaNode = activeTab === null || activeTab === void 0 ? void 0 : activeTab.getElementsByClassName('slds-form')[3].childNodes[0].childNodes[1].childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].childNodes[0];
+                const rdaDomain = rdaNode.innerText;
+                if (rdaDomain && rdaDomain.length > 0) {
+                    return [rdaNode, rdaDomain, undefined, undefined];
+                }
+                else if (!rdaDomain && hostEnvironment && tenant) {
+                    return [rdaNode, undefined, hostEnvironment, tenant];
                 }
                 else {
                     return undefined;
@@ -75,14 +82,28 @@ class SalesforceCase {
             };
             // Create link to Layer0 Hub and copy domain to clipboard
             const createLayer0HubLink = (rda) => {
-                rda[0].innerHTML = `<a>${rda[1]}</a>`;
-                rda[0].addEventListener('click', () => {
-                    // Trim off 'config'
-                    const domain = rda[1].split('.').splice(1).join('.');
-                    navigator.clipboard.writeText(domain).then(() => {
-                        window.open('https://hub.admin.prod.a0core.net/orgs', '_blank', 'noopener');
-                    });
-                });
+                const [rdaNode, rdaDomain, hostEnvironment, tenant] = rda;
+                if (rdaNode.getAttribute('listener') !== 'true') {
+                    if (rdaNode && rdaDomain) {
+                        rdaNode.innerHTML = `<a>${rdaDomain}</a>`;
+                        rdaNode.addEventListener('click', () => {
+                            // Trim off 'config'
+                            const domain = rdaDomain.split('.').splice(1).join('.');
+                            navigator.clipboard.writeText(domain).then(() => {
+                                window.open('https://hub.admin.prod.a0core.net/orgs', '_blank', 'noopener');
+                            });
+                        });
+                        rdaNode.setAttribute('listener', 'true');
+                        // Create link to public cloud OpenSearch logs
+                    }
+                    else if (rdaNode && !rdaDomain && tenant && hostEnvironment && Object.keys(publicCloudEnvironments).includes(hostEnvironment)) {
+                        const formattedTenant = tenant.split('@')[0];
+                        rdaNode.innerHTML = `<a>${hostEnvironment}</a>`;
+                        rdaNode.addEventListener('click', () => {
+                            window.open(`${publicCloudEnvironments[hostEnvironment]}?_a=(columns:!(log_type,operation,res.status_code,req.ip,space,tenant),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:logs_server,key:space,negate:!f,params:(query:${hostEnvironment}),type:phrase),query:(match_phrase:(space:${hostEnvironment}))),('$state':(store:appState),meta:(alias:!n,disabled:!f,index:logs_server,key:tenant,negate:!f,params:(query:${formattedTenant}),type:phrase),query:(match_phrase:(tenant:${formattedTenant})))),index:logs_server,interval:auto,query:(language:kuery,query:''),sort:!())&_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-7d,to:now))`, '_blank', 'noopener');
+                        });
+                    }
+                }
             };
             let rootDomainAuthority;
             // Periodically check for RDA value and add link
@@ -160,3 +181,14 @@ chrome.runtime.onMessage.addListener((req, _sender, res) => {
         res("200 Success");
     }
 });
+// For layer0 public cloud OpenSearch links
+const publicCloudEnvironments = {
+    "prod-au-1": "https://logs.admin.pop-aws-ap-southeast-2.pop.prod.a0core.net/_dashboards/app/discover#/",
+    "prod-eu-1": "https://logs.admin.pop-aws-eu-central-1.pop.prod.a0core.net/_dashboards/app/discover#/",
+    "prod-eu-2": "https://logs.admin.pop-aws-eu-west-1.pop.prod.a0core.net/_dashboards/app/discover#/",
+    "prod-jp-1": "https://logs.admin.pop-aws-ap-northeast-1.pop.prod.a0core.net/_dashboards/app/discover#/",
+    "prod-uk-1": "https://logs.admin.pop-aws-eu-west-2.pop.prod.a0core.net/_dashboards/app/discover#/",
+    "prod-us-1": "https://logs.admin.pop-aws-us-west-2.pop.prod.a0core.net/_dashboards/app/discover#/",
+    "prod-us-3": "https://logs.admin.pop-aws-us-east-2.pop.prod.a0core.net/_dashboards/app/discover#/",
+    "prod-us-4": "https://logs.admin.pop-aws-us-west-2.pop.prod.a0core.net/_dashboards/app/discover#/"
+};
