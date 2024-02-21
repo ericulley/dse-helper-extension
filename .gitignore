@@ -8,5 +8,5 @@ node_modules
 *.txt
 scrap*
 
-# Ignore files related to secrets
+# Ignore secrets & env variables
 .env
